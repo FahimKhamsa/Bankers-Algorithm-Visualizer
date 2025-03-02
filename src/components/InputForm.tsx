@@ -382,7 +382,7 @@ const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
 
       <form onSubmit={handleSubmit}>
         <div className="mb-6">
-          <h3 className="text-lg font-medium mb-3">Total Resources</h3>
+          <h3 className="text-lg font-medium mb-3">Available Resources</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
             {available.map((av, i) => (
               <div key={`resource-${i}`}>
