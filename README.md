@@ -43,8 +43,8 @@ The application will be available at: **`http://localhost:5173`**
 
 - **React.js** - Frontend framework
 - **Vite** - Fast development environment
-- **JavaScript (ES6+)** - Core scripting language
-- **CSS** - Styling
+- **TypeScript** - Core scripting language
+- **Tailwind CSS** - Styling
 
 ## 🤝 Contributing
 
