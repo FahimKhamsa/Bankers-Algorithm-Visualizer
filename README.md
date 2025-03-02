@@ -34,8 +34,8 @@ The application will be available at: **`http://localhost:5173`**
 ## 📌 Features
 
 ✅ Visual representation of Banker's Algorithm in action  
-✅ Input resource allocation and request values dynamically  
-✅ See step-by-step execution of the algorithm  
+✅ Input available resources, resource allocations and max values dynamically (default, custom input or by uploading csv files)  
+✅ See step-by-step execution of the algorithm with execution details
 ✅ Identify safe and unsafe states  
 ✅ Simple and intuitive UI
 
