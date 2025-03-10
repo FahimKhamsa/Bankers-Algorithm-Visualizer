@@ -29,17 +29,18 @@ function buildTree(
   const node: Node = {
     id: `${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
     available,
-    processes: sequence, // Store sequence instead
+    processes: sequence,
     children: [],
     x: 0,
     y: 0,
-    isSafe,
+    isSafe, // Initially mark only if this node is safe
   };
 
   if (isSafe) {
-    // console.log("Safe sequence found:", sequence); // Debugging log
     return node;
   }
+
+  let hasSafeChild = false;
 
   for (const processId of remainingProcesses) {
     const canAllocate = allocation[processId].every(
@@ -51,7 +52,7 @@ function buildTree(
         (a, i) => a + allocation[processId][i]
       );
       const newRemaining = remainingProcesses.filter((p) => p !== processId);
-      const newSequence = [...sequence, processId]; // Track execution order
+      const newSequence = [...sequence, processId];
 
       const child = buildTree(
         allocation,
@@ -61,8 +62,17 @@ function buildTree(
         newSequence
       );
       child.processId = processId;
+
+      if (child.isSafe) {
+        hasSafeChild = true;
+      }
+
       node.children.push(child);
     }
+  }
+
+  if (hasSafeChild) {
+    node.isSafe = true; // Mark this node safe if it leads to a safe sequence
   }
 
   return node;
@@ -101,7 +111,7 @@ const TreeNode: React.FC<{ node: Node; isRoot?: boolean }> = ({
           y1={node.y}
           x2={child.x}
           y2={child.y}
-          stroke={child.isSafe ? "white" : "black"} // White edges for safe sequences
+          stroke={node.isSafe && child.isSafe ? "white" : "black"} // White edges if both nodes are safe
           strokeWidth="0.4"
         />
         <TreeNode node={child} />
@@ -111,8 +121,8 @@ const TreeNode: React.FC<{ node: Node; isRoot?: boolean }> = ({
     <circle
       cx={node.x}
       cy={node.y}
-      r="2.5" // Make node size even smaller
-      fill={isRoot ? "blue" : node.isSafe ? "green" : "red"} // Root is blue, safe sequence green
+      r="2.5"
+      fill={isRoot ? "blue" : node.isSafe ? "green" : "red"} // Make all safe nodes green
     />
 
     {node.processId !== undefined && (
@@ -122,7 +132,7 @@ const TreeNode: React.FC<{ node: Node; isRoot?: boolean }> = ({
         textAnchor="middle"
         dominantBaseline="middle"
         fill="white"
-        className="text-[2.5px] font-medium" // Reduce text size even more
+        className="text-[2.5px] font-medium"
       >
         P{node.processId}
       </text>
