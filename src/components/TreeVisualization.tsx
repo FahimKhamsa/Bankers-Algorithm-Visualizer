@@ -22,23 +22,24 @@ function buildTree(
   max: number[][],
   available: number[],
   remainingProcesses: number[],
-  visited = new Set<string>()
+  sequence: number[] = [] // Track execution sequence
 ): Node {
   const isSafe = remainingProcesses.length === 0;
 
   const node: Node = {
-    id: Math.random().toString(36).substr(2, 9),
+    id: `${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
     available,
-    processes: remainingProcesses,
+    processes: sequence, // Store sequence instead
     children: [],
     x: 0,
     y: 0,
     isSafe,
   };
 
-  const stateKey = `${available.join(",")}-${remainingProcesses.join(",")}`;
-  if (visited.has(stateKey)) return node;
-  visited.add(stateKey);
+  if (isSafe) {
+    console.log("Safe sequence found:", sequence); // Debugging log
+    return node;
+  }
 
   for (const processId of remainingProcesses) {
     const canAllocate = allocation[processId].every(
@@ -50,21 +51,17 @@ function buildTree(
         (a, i) => a + allocation[processId][i]
       );
       const newRemaining = remainingProcesses.filter((p) => p !== processId);
+      const newSequence = [...sequence, processId]; // Track execution order
 
       const child = buildTree(
         allocation,
         max,
         newAvailable,
         newRemaining,
-        visited
+        newSequence
       );
       child.processId = processId;
       node.children.push(child);
-
-      // Mark the entire safe sequence (from leaf to root)
-      if (child.isSafe) {
-        node.isSafe = true;
-      }
     }
   }
 
