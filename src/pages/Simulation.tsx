@@ -71,13 +71,13 @@ const Simulation: React.FC = () => {
     // Save current state before updating
     const stateToSave = {
       ...simulationState,
-      processes: simulationState.processes.map(p => ({...p})),
+      processes: simulationState.processes.map((p) => ({ ...p })),
       available: [...simulationState.available],
       work: [...simulationState.work],
       safeSequence: [...simulationState.safeSequence],
-      stepExplanation: [...simulationState.stepExplanation]
+      stepExplanation: [...simulationState.stepExplanation],
     };
-    setStateHistory(prev => [...prev, stateToSave]);
+    setStateHistory((prev) => [...prev, stateToSave]);
 
     const newState = executeStep(simulationState);
     setSimulationState(newState);
@@ -86,16 +86,20 @@ const Simulation: React.FC = () => {
   // Step backward
   const handleStepBackward = useCallback(() => {
     if (!simulationState || stateHistory.length === 0) return;
-    
+
     const previousState = {
       ...stateHistory[stateHistory.length - 1],
-      processes: stateHistory[stateHistory.length - 1].processes.map(p => ({...p})),
+      processes: stateHistory[stateHistory.length - 1].processes.map((p) => ({
+        ...p,
+      })),
       available: [...stateHistory[stateHistory.length - 1].available],
       work: [...stateHistory[stateHistory.length - 1].work],
       safeSequence: [...stateHistory[stateHistory.length - 1].safeSequence],
-      stepExplanation: [...stateHistory[stateHistory.length - 1].stepExplanation]
+      stepExplanation: [
+        ...stateHistory[stateHistory.length - 1].stepExplanation,
+      ],
     };
-    
+
     const newHistory = stateHistory.slice(0, -1);
     setStateHistory(newHistory);
     setSimulationState(previousState);
@@ -116,13 +120,13 @@ const Simulation: React.FC = () => {
     // Save current state before showing result
     const stateToSave = {
       ...simulationState,
-      processes: simulationState.processes.map(p => ({...p})),
+      processes: simulationState.processes.map((p) => ({ ...p })),
       available: [...simulationState.available],
       work: [...simulationState.work],
       safeSequence: [...simulationState.safeSequence],
-      stepExplanation: [...simulationState.stepExplanation]
+      stepExplanation: [...simulationState.stepExplanation],
     };
-    setStateHistory(prev => [...prev, stateToSave]);
+    setStateHistory((prev) => [...prev, stateToSave]);
 
     const finalState = runFullAlgorithm(simulationState);
     setSimulationState(finalState);
@@ -157,8 +161,16 @@ const Simulation: React.FC = () => {
 
   // Run automatic execution
   useEffect(() => {
-    if (!controls.isRunning || !simulationState || simulationState.isComplete)
-      return;
+    if (!simulationState) return;
+
+    if (controls.isRunning && simulationState.isComplete) {
+      setControls((prev) => ({
+        ...prev,
+        isRunning: false,
+      }));
+    }
+
+    if (!controls.isRunning || simulationState.isComplete) return;
 
     const interval = setInterval(() => {
       handleStepForward();

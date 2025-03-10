@@ -9,8 +9,8 @@ const Footer: React.FC = () => {
           <div className="flex items-center mb-4 md:mb-0">
             <Code className="h-5 w-5 text-primary mr-2" />
             <span className="text-sm text-gray-400">
-              Banker's Algorithm Visualizer © Fahim Khamsa{" "}
-              {new Date().getFullYear()}
+              Banker's Algorithm Visualizer © Fahim Rahman 2025 © assignment in{" "}
+              <b>CSE 4501: Operating Systems</b>
             </span>
           </div>
 

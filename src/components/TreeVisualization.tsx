@@ -37,7 +37,7 @@ function buildTree(
   };
 
   if (isSafe) {
-    console.log("Safe sequence found:", sequence); // Debugging log
+    // console.log("Safe sequence found:", sequence); // Debugging log
     return node;
   }
 
